@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Shopping List</h1>
+      <h1>No way the CI/CD is working as expected :O</h1>
       {!user ? (
         <>
           <input
