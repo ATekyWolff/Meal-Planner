@@ -33,6 +33,6 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          local-dir: dist
+          local-dir: dist/
           server-dir: public_html/meal_planner
           dangerous-clean-slate: true
