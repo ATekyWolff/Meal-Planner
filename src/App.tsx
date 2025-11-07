@@ -1,61 +1,64 @@
-import { useState } from 'react'
-import { supabase } from './lib/supabaseClient'
+import { useState } from 'react';
+import { DAYS, type DayName, type WeekPlan } from './features/weekly-planner/types';
+
+const createId = () => Math.random().toString(36).slice(2);
 
 export default function App() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState<any>(null);
-  const [message, setMessage] = useState("");
+  // state fro the week's' recipes
+  const [week, setWeek] = useState<WeekPlan>(() => {
+    // empty object with all 7 days initialized as empty arrays
+    const empty: WeekPlan = {
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+      Sunday: []
+    };
+    return empty;
+  });
 
-  async function handleSignUp() {
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) setMessage(error.message);
-    else setMessage("Check your email for a confirmation link!");
-  }
-
-  async function handleSignIn() {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setMessage(error.message);
-    else {
-      setUser(data.user);
-      setMessage("Logged in!");
-    }
-  }
-
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    setUser(null);
+  // dummy recipe button for now
+  const handleAddRecipe = (day: DayName) => {
+    setWeek((prev) => ({
+      ...prev,
+      [day]: [
+        ...prev[day],
+        { id: createId(), name: "New Recipe" }
+      ]
+    }));
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>No way the CI/CD is working as expected :O</h1>
-      {!user ? (
-        <>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <br />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <br />
-          <button onClick={handleSignUp}>Sign Up</button>
-          <button onClick={handleSignIn}>Sign In</button>
-          <p>{message}</p>
-        </>
-      ) : (
-        <>
-          <p>Welcome, {user.email}</p>
-          <button onClick={handleSignOut}>Sign Out</button>
-        </>
-      )}
+    <div className='min-h-screen bg-slate-100 p-6'>
+      <div className='max-w-3xl mx-auto space-y-4'>
+        <h2>Today, I Learned about state state management, creating a type and exporting them, tailwindcss and some of the classNames, map is just iterating, and a few other things that I haven't cemented yet.</h2>
+        {DAYS.map((day) => (
+          <div key={day} className='bg-white p-4 rounded shadow-sm'>
+            <div className='flex items-center justify-between mb-2'>
+              <h2 className='text-lg font-semibold'>{day}</h2>
+              <button
+                onClick={() => handleAddRecipe(day)} 
+                className='text-sm px-3 py-1 rounded-md bg-indigo-500 text-white hover:bg-indigo-600'>
+                + Add Recipe
+              </button>
+            </div>
+
+          {week[day].length === 0 ? (
+            <p className='text-sm text-slate-400'>No recipes yet.</p>
+          ) : (
+            <ul className=''>
+              {week[day].map((r) => (
+                <li className=''>
+                  {r.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
