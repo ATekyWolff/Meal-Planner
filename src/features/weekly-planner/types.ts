@@ -17,7 +17,15 @@ export type DayName = (typeof DAYS)[number];
 export interface Recipe {
     id: string,
     name: string;
+    ingredients: Ingredient[];
 }
 
 // Define what a week looks like
 export type WeekPlan = Record<DayName, Recipe[]>;
+
+export interface Ingredient {
+    id: string;
+    name: string;
+    amount: string;
+    unit: string;
+}

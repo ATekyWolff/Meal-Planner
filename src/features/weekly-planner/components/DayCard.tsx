@@ -26,7 +26,7 @@ const DayCard: React.FC<DayCardProps> = ({
     };
 
     return (
-        <section className='bg-white rounded-lg shadow-sm p-4'>
+        <section className='bg-green-200 rounded-lg shadow-sm p-4'>
             <div className='flex items-center justify-between mb-3'>
                 <h2 className='text-lg font-semibold'>{day}</h2>
             </div>
